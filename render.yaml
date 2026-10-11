@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: han-kebap-steakhouse
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: ""
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production

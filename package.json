@@ -1,0 +1,16 @@
+{
+  "name": "han-kebap-steakhouse",
+  "version": "1.0.0",
+  "description": "Han Kebap & Steakhouse Luxury Website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "steakhouse",
+    "restaurant",
+    "han-kebap"
+  ],
+  "author": "goktugis",
+  "license": "MIT"
+}
