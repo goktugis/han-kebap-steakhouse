@@ -120,17 +120,15 @@ function initMobileMenu() {
 }
 
 /* ==========================================================================
-   3. PRECISION MEAT-CUT DONENESS SIMULATOR
-   Zero global photo filters! Uses meat_mask.png to tint ONLY the cut meat.
+   3. BİFTEK PİŞME REHBERİ (HER DERECE İÇİN AYRI ÖZGÜN FOTOĞRAF)
+   Her pişme derecesi için renk filtresi yerine gerçek gastronomi fotoğrafları.
    ========================================================================== */
 const precisionDonenessData = {
   rare: {
     temp: '48°C - 52°C',
     name: 'Az Pişmiş (Rare)',
-    desc: 'Dış mühürlemenin ardında etin lifleri sıcak, koyu kırmızı ve ipeksi yumuşaklıktadır. Doğal et suyu tamamen muhafaza edilir.',
-    tintColor: 'rgba(165, 10, 10, 0.85)', // Deep crimson ruby
-    opacity: '0.9',
-    blendMode: 'color',
+    desc: 'Dış mühürlemenin ardında etin lifleri sıcak, koyu yakut kırmızısı ve ipeksi yumuşaklıktadır. Doğal et suyu ve saf aroması tamamen muhafaza edilir.',
+    image: 'assets/images/steak_rare.jpg',
     pairing: 'Boğazkere veya Cabernet Sauvignon (Yüksek tanenli, gövdeli sek kırmızı)',
     tenderness: 96,
     juiciness: 92
@@ -138,10 +136,8 @@ const precisionDonenessData = {
   mediumrare: {
     temp: '54°C - 57°C',
     name: 'Az - Orta (Medium Rare) · Şefin Seçimi',
-    desc: 'Biftek gurmelerinin altın standardı. Ortada canlı pembe çekirdek, eriyen yağ dokusu ve karamelize dış kabuğun kusursuz dengesi.',
-    tintColor: 'transparent', // The photograph's natural cut is already pristine medium-rare!
-    opacity: '0',
-    blendMode: 'color',
+    desc: 'Biftek gurmelerinin altın standardı. Ortada canlı pembe çekirdek, eriyen yağ dokusu ve karamelize dış kabuğun kusursuz lezzet dengesi.',
+    image: 'assets/images/steak_medium_rare.jpg',
     pairing: 'Öküzgözü Rezerv veya Merlot (Dengeli meyvemsi tonlar ve kadifemsi bitiş)',
     tenderness: 92,
     juiciness: 95
@@ -149,21 +145,26 @@ const precisionDonenessData = {
   medium: {
     temp: '60°C - 63°C',
     name: 'Orta Pişmiş (Medium)',
-    desc: 'Merkezinde açık pembe bir şerit barındırır. Et lifleri sıkılaşmış, aromatik meşe tütsüsü etin derinliklerine işlemiştir.',
-    tintColor: 'rgba(235, 125, 140, 0.65)', // Warm pink-tan
-    opacity: '0.8',
-    blendMode: 'color',
+    desc: 'Merkezinde dengeli sıcak pembe bir şerit barındırır. Et lifleri kıvamında sıkılaşmış, aromatik meşe tütsüsü etin derinliklerine işlemiştir.',
+    image: 'assets/images/steak_medium.jpg',
     pairing: 'Syrah (Şiraz) veya Kalecik Karası (Baharatlı ve tütsülü zengin gövde)',
-    tenderness: 78,
-    juiciness: 80
+    tenderness: 80,
+    juiciness: 82
+  },
+  mediumwell: {
+    temp: '64°C - 67°C',
+    name: 'Orta - İyi Pişmiş (Medium Well)',
+    desc: 'Merkezinde çok hafif soluk pembe bir ton kalırken etin büyük kısmı pişmiştir. Dış kabuğun yoğun meşe aroması ve kıvamı öne çıkar.',
+    image: 'assets/images/steak_medium_well.jpg',
+    pairing: 'Kalecik Karası Rezerv veya Boğazkere (Olgun tanenler ve tütsü uyumu)',
+    tenderness: 68,
+    juiciness: 65
   },
   welldone: {
     temp: '71°C+',
     name: 'İyi Pişmiş (Well Done)',
-    desc: 'İçerisinde pembelik kalmayacak şekilde dinlendirilerek pişirilmiştir. Dış kabuğun meşe gevrekliği ile tam pişmiş kıvam.',
-    tintColor: 'rgba(125, 90, 70, 0.92)', // Cooked caramelized grey-brown
-    opacity: '0.95',
-    blendMode: 'color',
+    desc: 'İçerisinde pembelik kalmayacak şekilde dinlendirilerek pişirilmiştir. Dış kabuğun meşe gevrekliği ile tam pişmiş, aromatik ve dolgun et lezzeti.',
+    image: 'assets/images/steak_well_done.jpg',
     pairing: 'Gövdesi olgun Kalecik Karası veya Nar Ekşili Özel Meşrubat Seçkisi',
     tenderness: 58,
     juiciness: 52
@@ -175,7 +176,6 @@ function initPrecisionDonenessSimulator() {
   const tempNumber = document.getElementById('clean-temp-num');
   const nameTitle = document.getElementById('clean-doneness-title');
   const descText = document.getElementById('clean-doneness-desc');
-  const tintLayer = document.getElementById('meat-tint-overlay');
   const photoImg = document.getElementById('steak-natural-img');
   const tendernessFill = document.getElementById('clean-tenderness-fill');
   const juicinessFill = document.getElementById('clean-juiciness-fill');
@@ -183,10 +183,15 @@ function initPrecisionDonenessSimulator() {
   const juicinessVal = document.getElementById('clean-juiciness-val');
   const pairingText = document.getElementById('clean-pairing-text');
 
-  if (!buttons.length || !tintLayer) return;
+  if (!buttons.length || !photoImg) return;
 
-  // Ensure base image has NO global filter at all times!
-  if (photoImg) photoImg.style.filter = 'none';
+  // Preload all doneness images for instant response
+  Object.values(precisionDonenessData).forEach(item => {
+    if (item.image) {
+      const preloadImg = new Image();
+      preloadImg.src = item.image;
+    }
+  });
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -197,13 +202,18 @@ function initPrecisionDonenessSimulator() {
       const data = precisionDonenessData[level];
       if (!data) return;
 
-      // Base image is NEVER touched!
-      if (photoImg) photoImg.style.filter = 'none';
-
-      // ONLY the masked meat interior layer is tinted
-      tintLayer.style.backgroundColor = data.tintColor;
-      tintLayer.style.opacity = data.opacity;
-      tintLayer.style.mixBlendMode = data.blendMode;
+      // Smooth photo transition with authentic high-res images
+      if (data.image) {
+        photoImg.style.opacity = '0.35';
+        photoImg.style.transform = 'scale(0.985)';
+        
+        setTimeout(() => {
+          photoImg.src = data.image;
+          photoImg.alt = `Izgara Biftek Kesiti - ${data.name}`;
+          photoImg.style.opacity = '1';
+          photoImg.style.transform = 'scale(1)';
+        }, 120);
+      }
 
       // Update text & indicators
       if (tempNumber) tempNumber.textContent = data.temp;

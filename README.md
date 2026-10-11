@@ -12,6 +12,6 @@ Nusr-Et ve Elbet Steakhouse ilhamlı, sade ve asil (*quiet luxury*) gastronomi w
 
 ## 📱 Özellikler
 * **%100 Mobil Uyumlu:** Hamburger menü, dokunmatik sekmeler ve tüm mobil ekran boyutları (iPhone, Android) için optimize edilmiş responsive tasarım.
-* **Hassas Et Pişme Simülatörü:** Sadece etin kesit rengini değiştiren, arka plandaki garnitür ve tahtanın doğallığını koruyan interaktif pişme rehberi.
+* **İnteraktif Biftek Pişme Rehberi:** Her pişme derecesi (Rare, Medium Rare, Medium, Medium Well, Well Done) için yapay renk filtresi yerine özel çekim gerçekçi gastronomi fotoğrafları, iç ısı dereceleri ve sommelier eşleşmeleri.
 * **Fiyatsız Gurme Menü:** Michelin seçkisi standartlarında tabak detayları ve odun dumanı notları.
 * **VIP Rezervasyon Modalı:** Doğrudan rezervasyon talebi oluşturan interaktif form.
